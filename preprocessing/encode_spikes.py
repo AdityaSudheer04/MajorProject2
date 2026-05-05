@@ -14,7 +14,10 @@ def delta_encoding(window, threshold=0.05):
 
 
 # --- Latency Encoding ---
-def latency_encoding(window, threshold=0.7):
+def latency_encoding(window, threshold=0.3):  # ✅ Lowered from 0.7 → 0.3
+    # Why: threshold=0.7 was too aggressive — weaker fault types (LL, LLG) produce
+    # lower-amplitude signals that were being silenced, starving the classifier.
+    # 0.3 preserves fault-discriminative information across all 4 fault classes.
 
     T = window.shape[0]
     encoded = np.zeros_like(window)
@@ -30,7 +33,7 @@ def latency_encoding(window, threshold=0.7):
         spike_times = spike_times.astype(int)
 
         for t, st in enumerate(spike_times):
-            if norm[t] > threshold:   # ✅ ONLY strong values
+            if norm[t] > threshold:   # ✅ More inclusive — catches weaker fault signals
                 encoded[st, f] = 1
 
     return encoded

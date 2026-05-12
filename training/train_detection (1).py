@@ -29,7 +29,7 @@ model = SNNDetection()
 criterion = nn.BCEWithLogitsLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.005)
 
-epochs = 4
+epochs = 50
 
 for epoch in range(epochs):
     total_loss = 0
